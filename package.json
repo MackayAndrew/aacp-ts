@@ -1,0 +1,47 @@
+{
+  "name": "aacp-ts",
+  "version": "1.1.0",
+  "description": "Agent Action Compression Protocol \u2014 TypeScript SDK for multi-agent LLM coordination",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
+  },
+  "scripts": {
+    "build": "tsc",
+    "test": "npx ts-node --compiler-options '{\"module\":\"CommonJS\"}' tests/smoke.test.ts",
+    "dev": "npx tsx src/index.ts",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "keywords": [
+    "aacp",
+    "agents",
+    "multi-agent",
+    "llm",
+    "protocol",
+    "coordination",
+    "ai",
+    "typescript"
+  ],
+  "author": "Andrew Mackay <mackayandrewr@gmail.com>",
+  "license": "MIT",
+  "homepage": "https://aacp.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/MackayAndrew/aacp-ts"
+  },
+  "bugs": {
+    "url": "https://github.com/MackayAndrew/aacp-ts/issues"
+  },
+  "devDependencies": {
+    "typescript": "^5.4.0",
+    "@types/node": "^20.0.0",
+    "ts-node": "^10.9.2"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}
