@@ -1,0 +1,1 @@
+{"version":3,"file":"ruleBasedEncoder.d.ts","sourceRoot":"","sources":["../../Src/encoders/ruleBasedEncoder.ts"],"names":[],"mappings":"AAAA;;;;;GAKG;AAEH,OAAO,EAAgB,YAAY,EAAE,aAAa,EAAE,MAAM,WAAW,CAAC;AAqCtE,qBAAa,gBAAgB;IAC3B,OAAO,CAAC,SAAS,CAAuB;IAExC,MAAM,CAAC,MAAM,EAAE,YAAY,GAAG,aAAa;CA4F5C"}

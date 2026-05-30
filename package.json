@@ -1,15 +1,9 @@
 {
   "name": "aacp-ts",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Agent Action Compression Protocol \u2014 TypeScript SDK for multi-agent LLM coordination",
   "main": "./dist/index.js",
   "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
-    }
-  },
   "scripts": {
     "build": "tsc",
     "test": "npx ts-node --compiler-options '{\"module\":\"CommonJS\"}' tests/smoke.test.ts",
