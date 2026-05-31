@@ -7,7 +7,7 @@
 import {
   PayrollEncoder, ITEncoder, InvoiceEncoder, ContractEncoder,
   AACPValidator, AACPDecoder, AACP_VERSION,
-} from "../src/index";
+} from "../src/index.js";
 
 let passed = 0;
 let failed = 0;
@@ -160,3 +160,56 @@ if (failed > 0) {
 } else {
   console.log("\n  TypeScript SDK v1.1 — all tests passed\n");
 }
+
+// ── New v1.3 encoders ─────────────────────────────────────────────────────
+import {
+  SalesEncoder, JMLEncoder, CSResolutionEncoder, MonthEndEncoder,
+} from "../src/index.js";
+
+section("SalesEncoder — Sales Qualification");
+const sales = new SalesEncoder();
+const s1 = sales.fetchLead("L-7712");
+console.log(`  ${s1.packet}`);
+assert(s1.packet.startsWith("FETCH|SALES|"), "FETCH|SALES packet");
+assert(s1.packet.includes("id=L-7712"), "lead id in filter");
+assert(s1.apiCostUsd === 0.0, "zero cost");
+const sRun = sales.fullQualification("L-7712");
+assert(sRun.length === 5, "full qualification returns 5 packets");
+assert(sRun.every(p => v.validate(p.packet).valid), "all sales packets valid");
+
+section("JMLEncoder — HR Onboarding / JML");
+const jml = new JMLEncoder();
+const j1 = jml.createAccount("j.smith", "Engineering");
+console.log(`  ${j1.packet}`);
+assert(j1.packet.startsWith("BUILD|IT|"), "BUILD|IT packet");
+assert(j1.packet.includes("usr=j.smith"), "username in filter");
+const jRun = jml.fullJoiner("E009", "j.smith", "Engineering");
+assert(jRun.length === 6, "full joiner returns 6 packets");
+assert(jRun.every(p => v.validate(p.packet).valid), "all JML packets valid");
+const mover = jml.updateAccess("j.smith", "senior_engineer");
+assert(mover.packet.includes("no_privilege_creep"), "mover has privilege check");
+
+section("CSResolutionEncoder — Complaint Resolution");
+const cs = new CSResolutionEncoder();
+const c1 = cs.resolveComplaint("T-9912", { sentiment: "negative", tone: "empathetic", ltv: 8000, goodwill: true });
+console.log(`  ${c1.packet}`);
+assert(c1.packet.startsWith("RESOLVE|CS|"), "RESOLVE|CS packet");
+assert(c1.packet.includes("sentiment:negative"), "sentiment present");
+assert(c1.packet.includes("tone:empathetic"), "tone present");
+assert(c1.packet.includes("ltv:8000"), "ltv present");
+assert(c1.packet.includes("goodwill_consider"), "goodwill in req");
+const cRun = cs.fullResolution("C-4421", "T-9912", { ltv: 8000 });
+assert(cRun.length === 5, "full resolution returns 5 packets");
+assert(cRun.every(p => v.validate(p.packet).valid), "all CS packets valid");
+
+section("MonthEndEncoder — Finance Month-End Close");
+const me = new MonthEndEncoder();
+const me1 = me.fetchTrialBalance("2026-03");
+console.log(`  ${me1.packet}`);
+assert(me1.packet.startsWith("FETCH|FIN|"), "FETCH|FIN packet");
+assert(me1.packet.includes("period:2026-03"), "period present");
+const me4 = me.varianceAnalysis("2026-03", "2026-02");
+assert(me4.packet.includes("MATERIAL_VARIANCE"), "material variance highlight");
+const meRun = me.fullClose("2026-03", "2026-02");
+assert(meRun.length === 6, "full close returns 6 packets");
+assert(meRun.every(p => v.validate(p.packet).valid), "all month-end packets valid");

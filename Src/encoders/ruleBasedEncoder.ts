@@ -1,12 +1,11 @@
 /**
- * AACP v1.1 Rule-Based Encoder
+ * AACP v1.1 Rule-Based Encoder — v1.3.0
  * Deterministic, zero-cost encoding for structured input.
  * Everything except TASK and DOM is a named key:value pair.
- * No empty positional slots. No LLM calls.
  */
 
-import { AACP_VERSION, EncodeParams, EncodedPacket } from "../schema";
-import { AACPValidator } from "../validator";
+import { AACP_VERSION, EncodeParams, EncodedPacket } from "../schema.js";
+import { AACPValidator } from "../validator.js";
 
 class EncodedPacketImpl implements EncodedPacket {
   constructor(
@@ -56,7 +55,6 @@ export class RuleBasedEncoder {
       actor, chain, prog, ltv, loyalty, urgency,
     } = params;
 
-    // Core: TASK and DOM positional, everything else named
     const parts: string[] = [
       task.toUpperCase(),
       domain.toUpperCase(),
@@ -125,16 +123,9 @@ export class RuleBasedEncoder {
     const tokenEstimateEnglish = 15 + parts.length * 8;
 
     return new EncodedPacketImpl(
-      packet,
-      domain.toUpperCase(),
-      task.toUpperCase(),
-      tokenEstimateEnglish,
-      tokenEstimatePacket,
-      "none",
-      null,
-      AACP_VERSION,
-      "rule_based",
-      0.0,
+      packet, domain.toUpperCase(), task.toUpperCase(),
+      tokenEstimateEnglish, tokenEstimatePacket,
+      "none", null, AACP_VERSION, "rule_based", 0.0,
     );
   }
 }
