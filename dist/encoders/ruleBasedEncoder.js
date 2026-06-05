@@ -1,14 +1,13 @@
 "use strict";
 /**
- * AACP v1.1 Rule-Based Encoder
+ * AACP v1.1 Rule-Based Encoder — v1.3.0
  * Deterministic, zero-cost encoding for structured input.
  * Everything except TASK and DOM is a named key:value pair.
- * No empty positional slots. No LLM calls.
  */
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.RuleBasedEncoder = void 0;
-const schema_1 = require("../schema");
-const validator_1 = require("../validator");
+const schema_js_1 = require("../schema.js");
+const validator_js_1 = require("../validator.js");
 class EncodedPacketImpl {
     constructor(packet, domain, task, tokenEstimateEnglish, tokenEstimatePacket, compressionLoss, lossNote, aacpVersion, encoderType, apiCostUsd) {
         this.packet = packet;
@@ -42,17 +41,16 @@ class EncodedPacketImpl {
 }
 class RuleBasedEncoder {
     constructor() {
-        this.validator = new validator_1.AACPValidator();
+        this.validator = new validator_js_1.AACPValidator();
     }
     encode(params) {
         const { task, domain, returnAgent, priority = "2", res, period, filterExpr, fields, fmt, src, srcPrev, rules, validate, template, dataPtr, amt, ccy, supplier, match, terms, docType, party, clause, issue, risk, block, flags, flagsInherit, req, highlight, status, to, subj, att, flagMsg, tone, sentiment, actor, chain, prog, ltv, loyalty, urgency, } = params;
-        // Core: TASK and DOM positional, everything else named
         const parts = [
             task.toUpperCase(),
             domain.toUpperCase(),
             `return:${returnAgent}`,
             `p:${priority}`,
-            `aacp:${schema_1.AACP_VERSION}`,
+            `aacp:${schema_js_1.AACP_VERSION}`,
         ];
         const add = (key, val) => {
             if (val !== null && val !== undefined && String(val).trim() !== "") {
@@ -106,7 +104,7 @@ class RuleBasedEncoder {
         }
         const tokenEstimatePacket = Math.max(1, Math.floor(packet.length / 4));
         const tokenEstimateEnglish = 15 + parts.length * 8;
-        return new EncodedPacketImpl(packet, domain.toUpperCase(), task.toUpperCase(), tokenEstimateEnglish, tokenEstimatePacket, "none", null, schema_1.AACP_VERSION, "rule_based", 0.0);
+        return new EncodedPacketImpl(packet, domain.toUpperCase(), task.toUpperCase(), tokenEstimateEnglish, tokenEstimatePacket, "none", null, schema_js_1.AACP_VERSION, "rule_based", 0.0);
     }
 }
 exports.RuleBasedEncoder = RuleBasedEncoder;

@@ -191,13 +191,13 @@ assert(mover.packet.includes("no_privilege_creep"), "mover has privilege check")
 
 section("CSResolutionEncoder — Complaint Resolution");
 const cs = new CSResolutionEncoder();
-const c1 = cs.resolveComplaint("T-9912", { sentiment: "negative", tone: "empathetic", ltv: 8000, goodwill: true });
+const cs1 = cs.resolveComplaint("T-9912", { sentiment: "negative", tone: "empathetic", ltv: 8000, goodwill: true });
 console.log(`  ${c1.packet}`);
-assert(c1.packet.startsWith("RESOLVE|CS|"), "RESOLVE|CS packet");
-assert(c1.packet.includes("sentiment:negative"), "sentiment present");
-assert(c1.packet.includes("tone:empathetic"), "tone present");
-assert(c1.packet.includes("ltv:8000"), "ltv present");
-assert(c1.packet.includes("goodwill_consider"), "goodwill in req");
+assert(cs1.packet.startsWith("RESOLVE|CS|"), "RESOLVE|CS packet");
+assert(cs1.packet.includes("sentiment:negative"), "sentiment present");
+assert(cs1.packet.includes("tone:empathetic"), "tone present");
+assert(cs1.packet.includes("ltv:8000"), "ltv present");
+assert(cs1.packet.includes("goodwill_consider"), "goodwill in req");
 const cRun = cs.fullResolution("C-4421", "T-9912", { ltv: 8000 });
 assert(cRun.length === 5, "full resolution returns 5 packets");
 assert(cRun.every(p => v.validate(p.packet).valid), "all CS packets valid");
